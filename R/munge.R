@@ -45,7 +45,7 @@ read_csv_startdurval <- function(filename, tz=Sys.timezone()) {
     dplyr::mutate(
       duration = stringr::str_replace_all(duration, "\\[|\\]", ""),
       value = stringr::str_replace_all(value, "\\[|\\]", ""),
-      start = lubridate::as_datetime(start)) %>%
+      start = lubridate::as_datetime(start, tz=tz)) %>%
     dplyr::group_by(start) %>%
     dplyr::mutate(minidat = purrr::pmap(
       .l = list(start, duration, value),
