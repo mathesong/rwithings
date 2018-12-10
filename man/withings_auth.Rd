@@ -4,8 +4,8 @@
 \alias{withings_auth}
 \title{Authenticate with the Withings API}
 \usage{
-withings_auth(client_id, client_secret, scope = c("user.metrics", "user.info",
-  "user.activity"),
+withings_auth(client_id, client_secret, scope = c("user.metrics",
+  "user.info", "user.activity"),
   authorize_url = "https://account.withings.com/oauth2_user/authorize2",
   access_url = "https://account.withings.com/oauth2/token")
 }

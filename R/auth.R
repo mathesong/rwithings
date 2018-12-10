@@ -38,10 +38,26 @@ withings_auth <- function(client_id, client_secret,
                  app = withingsapp,
                  scope = scope)
 
-  token <- token$refresh()
-
   return(token)
 
 }
 
+#' Refresh token
+#'
+#' @param token Your token obtained using `withings_auth()`
+#'
+#' @return A refreshed access token
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' client_id <- 12345
+#' client_secret <- "hunter2"
+#' token <- withings_auth(client_id, client_secret)
+#'
+#' token <- withings_authrefresh(token)
+#' }
+withings_authrefresh <- function(token) {
+  token$refresh()
+}
 
