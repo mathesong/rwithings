@@ -1,0 +1,26 @@
+Package: rwithings
+Type: Package
+Title: Tools for Querying the Withings API
+Version: 0.0.0.9000
+Author: Granville J. Matheson
+Maintainer: Granville J. Matheson <mathesong@gmail.com>
+Description: Tools for querying the Withings API and csv files to easily
+    extract data into R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    httr,
+    glue,
+    lubridate,
+    jsonlite,
+    dplyr,
+    tibble,
+    stringr,
+    readr,
+    purrr,
+    tidyr,
+    magrittr,
+    stats
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1
