@@ -284,6 +284,9 @@ getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
 
   if(out$status==0) {
 
+    out$body$series <- lapply(out$body$series,
+                              function(x) x[!sapply(x, is.null)])
+
     out$body$series <- dplyr::bind_rows( out$body$series, .id="id")
 
   }
