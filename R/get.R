@@ -365,3 +365,54 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
   return(out)
 
 }
+
+#' Get list of ECG recordings and Afib classification in the chosen period of
+#' time
+#'
+#' @param token Your token obtained using `withings_auth()`
+#' @param startdate Start date in character, date or POSIXct format
+#' @param enddate End date in character, date or POSIXct format
+#' @param offset Offset
+#' @param lastupdate Last update (see API)
+#' @param tz Time zone
+#'
+#' @return A list containing the status (status) and the data (body)
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' getworkouts(token, "2018-10-16", "2018-10-18")
+#' }
+#'
+getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="") {
+
+  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
+  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
+
+  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.Date(startdate) }
+  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.Date(enddate) }
+
+  if(is.null(startdate) != is.null(enddate)) {
+    stop("Enter both a startdate and enddate")
+  }
+
+  req <- httr::GET(url = "https://wbsapi.withings.net/v2/heart",
+                    query=list(access_token=token$credentials$access_token,
+                        action="list",
+                        startdateymd = startdate,
+                        enddateymd = enddate,
+                        offset = offset))
+
+  httr::stop_for_status(req)
+
+  out <- httr::content(req, as = "text", encoding = "utf-8")
+
+  out <- jsonlite::fromJSON(out)
+
+  if(out$status==0 & length(out$body$series) > 0) {
+    out$body$series <- jsonlite::flatten(out$body$series)
+    out$body$series$timestamp<- as.POSIXct(out$body$series$timestamp, tz=tz, origin="1970-01-01")
+  }
+
+  return(out)
+}
