@@ -48,7 +48,8 @@ getmeas <- function(token, meastype, category, startdate=NULL, enddate=NULL,
                         offset = offset,
                         lastupdate = lastupdate))
   httr::stop_for_status(req)
-  out <- httr::content(req)
+
+  out <- httr::content(req, as = "text", encoding = "utf-8")
 
   out <- jsonlite::fromJSON(out)
 
@@ -106,9 +107,10 @@ getsleep <- function(token, startdate=NULL, enddate=NULL, tz="") {
              query=list(access_token=token$credentials$access_token,
                         startdate = startdate,
                         enddate = enddate))
+
   httr::stop_for_status(req)
 
-  out <- httr::content(req)
+  out <- httr::content(req, as = "text", encoding = "utf-8")
 
   out <- jsonlite::fromJSON(out)
 
@@ -162,7 +164,8 @@ getsleepsummary <- function(token, startdate=NULL, enddate=NULL, tz="") {
                               startdateymd = startdate,
                               enddateymd = enddate))
   httr::stop_for_status(req)
-  out <- httr::content(req)
+
+  out <- httr::content(req, as = "text", encoding = "utf-8")
 
   out <- jsonlite::fromJSON(out)
 
@@ -230,7 +233,8 @@ getactivity <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
                         lastupdate = lastupdate))
   httr::stop_for_status(req)
 
-  out <- httr::content(req)
+  out <- httr::content(req, as = "text", encoding = "utf-8")
+
   out <- jsonlite::fromJSON(out)
 
   if(out$status==0) {
@@ -279,7 +283,8 @@ getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
                         enddate = enddate))
   httr::stop_for_status(req)
 
-  out <- httr::content(req)
+  out <- httr::content(req, as = "text", encoding = "utf-8")
+
   out <- jsonlite::fromJSON(out)
 
   if(out$status==0) {
@@ -342,7 +347,8 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
                         lastupdate = lastupdate))
   httr::stop_for_status(req)
 
-  out <- httr::content(req)
+  out <- httr::content(req, as = "text", encoding = "utf-8")
+
   out <- jsonlite::fromJSON(out)
 
   if(out$status==0 & length(out$body$series) > 0) {
