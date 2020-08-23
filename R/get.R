@@ -381,7 +381,7 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
 #'
 #' @examples
 #' \dontrun{
-#' getworkouts(token, "2018-10-16", "2018-10-18")
+#' getheartlist(token, "2018-10-16", "2018-10-18")
 #' }
 #'
 getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="") {
@@ -414,5 +414,32 @@ getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="")
     out$body$series$timestamp<- as.POSIXct(out$body$series$timestamp, tz=tz, origin="1970-01-01")
   }
 
+  return(out)
+}
+
+
+#' Get the full data set of the ECG recordings in micro-volt (μV).
+#'
+#' @param token Your token obtained using `withings_auth()`
+#' @param signalid ID of a signal. Use `getheartlist()` to get one.
+#'
+#' @return A list containing the status (status) and the data (body)
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' getheart(token, 123456)
+#' }
+#'
+getheart<- function(token, signalid) {
+
+  req <- httr::GET(url = "https://wbsapi.withings.net/v2/heart",
+                    query=list(access_token=token$credentials$access_token,
+                        action="get",
+                        signalid=signalid))
+
+  httr::stop_for_status(req)
+  out <- httr::content(req, as = "text", encoding = "utf-8")
+  out <- jsonlite::fromJSON(out)
   return(out)
 }

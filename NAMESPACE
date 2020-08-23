@@ -2,6 +2,8 @@
 
 export("%>%")
 export(getactivity)
+export(getheart)
+export(getheartlist)
 export(getintradayactivity)
 export(getmeas)
 export(getsleep)
