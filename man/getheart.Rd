@@ -2,22 +2,20 @@
 % Please edit documentation in R/get.R
 \name{getheart}
 \alias{getheart}
-\title{Get list of ECG recordings and Afib classification in the chosen period of
-time}
+\title{Get the full data set of the ECG recordings in micro-volt (μV).}
 \usage{
 getheart(token, signalid)
 }
 \arguments{
 \item{token}{Your token obtained using \code{withings_auth()}}
 
-\item{signalid}{ID of a signal. Use \code{getheartlist()} to get one}
+\item{signalid}{ID of a signal. Use \code{getheartlist()} to get one.}
 }
 \value{
-Get the full data set of the ECG recordings in micro-volt (μV).
+A list containing the status (status) and the data (body)
 }
 \description{
-Get list of ECG recordings and Afib classification in the chosen period of
-time
+Get the full data set of the ECG recordings in micro-volt (μV).
 }
 \examples{
 \dontrun{

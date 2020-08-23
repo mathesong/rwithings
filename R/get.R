@@ -373,7 +373,6 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
 #' @param startdate Start date in character, date or POSIXct format
 #' @param enddate End date in character, date or POSIXct format
 #' @param offset Offset
-#' @param lastupdate Last update (see API)
 #' @param tz Time zone
 #'
 #' @return A list containing the status (status) and the data (body)

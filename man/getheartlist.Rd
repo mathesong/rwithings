@@ -17,8 +17,6 @@ getheartlist(token, startdate = NULL, enddate = NULL, offset = NULL, tz = "")
 \item{offset}{Offset}
 
 \item{tz}{Time zone}
-
-\item{lastupdate}{Last update (see API)}
 }
 \value{
 A list containing the status (status) and the data (body)
