@@ -16,7 +16,7 @@ devtools::install_github("mathesong/rwithings")
 
 Before being able to use this package, and the Withings Health Mate API, you will need to create a Withings account and a Withings developer app. Instructions are provided in the [developer's guide](http://developer.withings.com/oauth2/).
 
-Note: when setting up an app, the Callback URL should be set to http://localhost:1410/. This is not supposed to be allowed, but it seems to work, and I am also not sure how to make it work using another address. If anyone has any input on this, I'd really appreciate it.
+Note: when setting up an app, the Callback URL should be set to http://localhost:1410/. This is not supposed to be allowed, but it does seems to work, and I haven't been able to make it work using another address. If anyone has any input on this, please do make an issue.
 
 
 ## Examples
@@ -35,7 +35,7 @@ getmeas(token, meastype = 1, category=1, "2018-01-01", "2018-10-18")
 getsleep(token, "2018-10-16", "2018-10-18")
 getsleepsummary(token, "2018-10-16", "2018-10-18")
 ```
-In the case of entering in start and end dates, I've put in place conversions so that you can enter it as a character vector in YYYY-MM-DD format to make quick queries more easy.
+In the case of entering in start and end dates, there are conversions in place so that you can enter it as a character vector in YYYY-MM-DD format to make quick queries more easy.
 
 
 ### CSV Functions
@@ -46,4 +46,4 @@ The API used not to have functions for extracting heart rate data.  This data co
 hr_data <- read_csv_startdurval('raw_tracker_hr.csv')
 ```
 
-The API has been expanded to include HR data now as intraday activity, which can be extracted using the `getintradayactivity()` function.  But I've left the CSV munging command in place regardless as it's still useful for linking heart rate with exact times, or for processing large amounts of data at once.
+The API has been expanded to include HR data now as intraday activity, which can be extracted using the `getintradayactivity()` function.  Tthe CSV munging command remains in place regardless as it's still useful for processing large amounts of data at once without running into API request limits.
