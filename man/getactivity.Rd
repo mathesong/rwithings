@@ -4,8 +4,14 @@
 \alias{getactivity}
 \title{Get activity data}
 \usage{
-getactivity(token, startdate = NULL, enddate = NULL, offset = NULL,
-  lastupdate = NULL, tz = "")
+getactivity(
+  token,
+  startdate = NULL,
+  enddate = NULL,
+  offset = NULL,
+  lastupdate = NULL,
+  tz = ""
+)
 }
 \arguments{
 \item{token}{Your token obtained using \code{withings_auth()}}

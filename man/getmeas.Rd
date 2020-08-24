@@ -4,8 +4,16 @@
 \alias{getmeas}
 \title{Get measures data}
 \usage{
-getmeas(token, meastype, category, startdate = NULL, enddate = NULL,
-  offset = NULL, lastupdate = NULL, tz = Sys.timezone())
+getmeas(
+  token,
+  meastype,
+  category,
+  startdate = NULL,
+  enddate = NULL,
+  offset = NULL,
+  lastupdate = NULL,
+  tz = ""
+)
 }
 \arguments{
 \item{token}{Your token obtained using \code{withings_auth()}}
@@ -32,6 +40,6 @@ Get measures data
 }
 \examples{
 \dontrun{
-getmeas(token, meastype = 1, category=1, "2018-01-01", "2018-10-18")
+getmeas(token, meastype = 1, category=1, "2019-01-01", "2019-10-18")
 }
 }

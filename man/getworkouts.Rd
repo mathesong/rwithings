@@ -4,8 +4,14 @@
 \alias{getworkouts}
 \title{Get workouts data}
 \usage{
-getworkouts(token, startdate = NULL, enddate = NULL, offset = NULL,
-  lastupdate = NULL, tz = "")
+getworkouts(
+  token,
+  startdate = NULL,
+  enddate = NULL,
+  offset = NULL,
+  lastupdate = NULL,
+  tz = ""
+)
 }
 \arguments{
 \item{token}{Your token obtained using \code{withings_auth()}}
@@ -28,6 +34,6 @@ Get workouts data
 }
 \examples{
 \dontrun{
-getworkouts(token, "2018-10-16", "2018-10-18")
+getworkouts(token, "2018-10-16", "2018-11-18")
 }
 }

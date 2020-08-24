@@ -23,6 +23,6 @@ Get intraday activity data
 }
 \examples{
 \dontrun{
-getintradayactivity(token, "2018-10-16", "2018-10-18")
+getintradayactivity(token, "2018-10-16", "2018-11-18")
 }
 }
