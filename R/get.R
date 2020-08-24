@@ -14,22 +14,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' getmeas(token, meastype = 1, category=1, "2018-01-01", "2018-10-18")
+#' getmeas(token, meastype = 1, category=1, "2019-01-01", "2019-10-18")
 #' }
 getmeas <- function(token, meastype, category, startdate=NULL, enddate=NULL,
-                    offset=NULL, lastupdate=NULL, tz=Sys.timezone()) {
+                    offset=NULL, lastupdate=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-  if( class(lastupdate) == "character" ) { lastupdate = as.Date(lastupdate) }
-
-  if( class(startdate) == "Date" ) { startdate = as.POSIXct(startdate, tz=tz) }
-  if( class(enddate) == "Date" ) { enddate = as.POSIXct(enddate, tz=tz) }
-  if( class(lastupdate) == "Date" ) { lastupdate = as.POSIXct(lastupdate, tz=tz) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.numeric(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.numeric(enddate) }
-  if( sum(class(lastupdate) == "POSIXct")>=1 ) { lastupdate = as.numeric(lastupdate) }
+  startdate <- convert_date(startdate, "numeric", tz)
+  enddate <- convert_date(enddate, "numeric", tz)
+  lastupdate <- convert_date(lastupdate, "numeric", tz)
 
   if(!is.null(startdate) & !is.null(enddate) & !is.null(lastupdate)) {
     stop("Enter both a startdate and enddate, or a lastupdate, or nothing")
@@ -56,15 +48,17 @@ getmeas <- function(token, meastype, category, startdate=NULL, enddate=NULL,
   if(out$status==0) {
 
     out$body$updatetime = as.POSIXct(out$body$updatetime, tz=tz, origin="1970-01-01")
-    out$body$measuregrps <- jsonlite::flatten(out$body$measuregrps)
-    out$body$measuregrps$date <- as.POSIXct(out$body$measuregrps$date, tz=tz, origin="1970-01-01")
 
-    measures <- do.call("rbind", out$body$measuregrps$measures)
+    if( length(out$body$measuregrps) > 1) {
+      out$body$measuregrps <- jsonlite::flatten(out$body$measuregrps)
+      out$body$measuregrps$date <- as.POSIXct(out$body$measuregrps$date, tz=tz, origin="1970-01-01")
 
-    out$body$measuregrps <- dplyr::select(out$body$measuregrps, -"measures")
+      measures <- do.call("rbind", out$body$measuregrps$measures)
 
-    out$body$measuregrps <- dplyr::bind_cols(out$body$measuregrps, measures)
+      out$body$measuregrps <- dplyr::select(out$body$measuregrps, -"measures")
 
+      out$body$measuregrps <- dplyr::bind_cols(out$body$measuregrps, measures)
+    }
   }
 
   return(out)
@@ -90,14 +84,8 @@ getmeas <- function(token, meastype, category, startdate=NULL, enddate=NULL,
 #' }
 getsleep <- function(token, startdate=NULL, enddate=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-
-  if( class(startdate) == "Date" ) { startdate = as.POSIXct(startdate, tz=tz) }
-  if( class(enddate) == "Date" ) { enddate = as.POSIXct(enddate, tz=tz) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.numeric(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.numeric(enddate) }
+  startdate <- convert_date(startdate, "numeric", tz)
+  enddate <- convert_date(enddate, "numeric", tz)
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")
@@ -149,11 +137,8 @@ getsleep <- function(token, startdate=NULL, enddate=NULL, tz="") {
 #'
 getsleepsummary <- function(token, startdate=NULL, enddate=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.Date(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.Date(enddate) }
+  startdate <- convert_date(startdate, "Date", tz)
+  enddate <- convert_date(enddate, "Date", tz)
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")
@@ -205,13 +190,9 @@ getsleepsummary <- function(token, startdate=NULL, enddate=NULL, tz="") {
 #'
 getactivity <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastupdate=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-  if( class(lastupdate) == "character" ) { lastupdate = as.Date(lastupdate) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.Date(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.Date(enddate) }
-  if( sum(class(lastupdate) == "POSIXct")>=1 ) { lastupdate = as.Date(lastupdate) }
+  startdate <- convert_date(startdate, "Date", tz)
+  enddate <- convert_date(enddate, "Date", tz)
+  lastupdate <- convert_date(lastupdate, "Date", tz)
 
   if(is.null(startdate) & is.null(enddate) & is.null(lastupdate)) {
     stop("Enter both a startdate and enddate, or a lastupdate")
@@ -260,18 +241,12 @@ getactivity <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
 #'
 #' @examples
 #' \dontrun{
-#' getintradayactivity(token, "2018-10-16", "2018-10-18")
+#' getintradayactivity(token, "2018-10-16", "2018-11-18")
 #' }
 getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-
-  if( class(startdate) == "Date" ) { startdate = as.POSIXct(startdate, tz=tz) }
-  if( class(enddate) == "Date" ) { enddate = as.POSIXct(enddate, tz=tz) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.numeric(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.numeric(enddate) }
+  startdate <- convert_date(startdate, "numeric", tz)
+  enddate <- convert_date(enddate, "numeric", tz)
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")
@@ -293,6 +268,9 @@ getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
                               function(x) x[!sapply(x, is.null)])
 
     out$body$series <- dplyr::bind_rows( out$body$series, .id="id")
+
+    out$body$series$startdate <- as.POSIXct(as.numeric(out$body$series$id),
+                                            tz="", origin="1970-01-01")
 
   }
 
@@ -317,19 +295,14 @@ getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
 #'
 #' @examples
 #' \dontrun{
-#' getworkouts(token, "2018-10-16", "2018-10-18")
+#' getworkouts(token, "2018-10-16", "2018-11-18")
 #' }
-getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastupdate=NULL, tz="") {
+getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL,
+                        lastupdate=NULL, tz="") {
 
-  # measures <- getmeas(token, meastype = 1, category=1, "2018-01-01", "2018-10-18")
-
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-  if( class(lastupdate) == "character" ) { lastupdate = as.Date(lastupdate) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.Date(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.Date(enddate) }
-  if( sum(class(lastupdate) == "POSIXct")>=1 ) { lastupdate = as.Date(lastupdate) }
+  startdate <- convert_date(startdate, "Date", tz)
+  enddate <- convert_date(enddate, "Date", tz)
+  lastupdate <- convert_date(lastupdate, "Date", tz)
 
   if(!is.null(startdate) & !is.null(enddate) & !is.null(lastupdate)) {
     stop("Enter both a startdate and enddate, or a lastupdate, or nothing")
@@ -355,10 +328,10 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
 
     out$body$series <- jsonlite::flatten(out$body$series)
 
-    out$body$series$startdate <- as.POSIXct(out$body$series$startdate, tz=tz, origin="1970-01-01")
-    out$body$series$enddate <- as.POSIXct(out$body$series$enddate, tz=tz, origin="1970-01-01")
-    out$body$series$data.device_startdate <- as.POSIXct(out$body$series$data.device_startdate, tz=tz, origin="1970-01-01")
-    out$body$series$data.device_enddate <- as.POSIXct(out$body$series$data.device_enddate, tz=tz, origin="1970-01-01")
+    out$body$series$startdate <- as.POSIXct(out$body$series$startdate,
+                                            tz=tz, origin="1970-01-01")
+    out$body$series$enddate <- as.POSIXct(out$body$series$enddate,
+                                          tz=tz, origin="1970-01-01")
 
   }
 
@@ -385,11 +358,8 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastup
 #'
 getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="") {
 
-  if( class(startdate) == "character" ) { startdate = as.Date(startdate) }
-  if( class(enddate) == "character" ) { enddate = as.Date(enddate) }
-
-  if( sum(class(startdate) == "POSIXct")>=1 ) { startdate = as.Date(startdate) }
-  if( sum(class(enddate) == "POSIXct")>=1 ) { enddate = as.Date(enddate) }
+  startdate <- convert_date(startdate, "Date", tz)
+  enddate <- convert_date(enddate, "Date", tz)
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")
@@ -410,7 +380,8 @@ getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="")
 
   if(out$status==0 & length(out$body$series) > 0) {
     out$body$series <- jsonlite::flatten(out$body$series)
-    out$body$series$timestamp<- as.POSIXct(out$body$series$timestamp, tz=tz, origin="1970-01-01")
+    out$body$series$timestamp<- as.POSIXct(out$body$series$timestamp,
+                                           tz=tz, origin="1970-01-01")
   }
 
   return(out)

@@ -60,3 +60,31 @@ read_csv_startdurval <- function(filename, tz=Sys.timezone()) {
   return(dat)
 
 }
+
+
+convert_date <- function(date, output_type = c("numeric", "Date"),
+                         tz="") {
+
+  output_type <- match.arg(output_type, c("numeric", "Date"))
+
+  # Always convert from character to date
+  if( any(class(date) == "character" )) { date = as.Date(date) }
+
+  if( output_type == "numeric" ) {
+
+    # If to numeric, date --> POSIXct --> numeric
+
+    if( any(class(date) == "Date" )) { date = as.POSIXct(date, tz=tz,
+                                                         origin="1970-01-01") }
+    if( any(class(date) == "POSIXct")) { date = as.numeric(date) }
+
+  } else if( output_type == "Date" ) {
+
+    # If to date, POSIXct --> Date
+
+    if( any(class(date) == "POSIXct")) { date = as.Date(date) }
+
+  }
+
+  return(date)
+}
