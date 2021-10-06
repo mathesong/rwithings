@@ -53,7 +53,7 @@ getmeas <- function(token, meastype, category, startdate=NULL, enddate=NULL,
       out$body$measuregrps <- jsonlite::flatten(out$body$measuregrps)
       out$body$measuregrps$date <- as.POSIXct(out$body$measuregrps$date, tz=tz, origin="1970-01-01")
 
-      measures <- do.call("rbind", out$body$measuregrps$measures)
+      measures <- dplyr::bind_rows(out$body$measuregrps$measures)
 
       out$body$measuregrps <- dplyr::select(out$body$measuregrps, -"measures")
 
