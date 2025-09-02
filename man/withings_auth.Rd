@@ -8,8 +8,9 @@ withings_auth(
   client_id,
   client_secret,
   scope = c("user.metrics", "user.info", "user.activity"),
+  redirect_uri = "http://localhost:1410/",
   authorize_url = "https://account.withings.com/oauth2_user/authorize2",
-  access_url = "https://account.withings.com/oauth2/token"
+  access_url = "https://wbsapi.withings.net/v2/oauth2"
 )
 }
 \arguments{
@@ -18,6 +19,8 @@ withings_auth(
 \item{client_secret}{Your Client Secret}
 
 \item{scope}{Which information you would like to access}
+
+\item{redirect_uri}{Your redirect URI (default: http://localhost:1410/)}
 
 \item{authorize_url}{The authorize URL (you shouldn't need to touch this)}
 

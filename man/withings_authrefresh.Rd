@@ -2,7 +2,7 @@
 % Please edit documentation in R/auth.R
 \name{withings_authrefresh}
 \alias{withings_authrefresh}
-\title{Refresh token}
+\title{Refresh token (legacy function for backward compatibility)}
 \usage{
 withings_authrefresh(token)
 }
@@ -13,7 +13,7 @@ withings_authrefresh(token)
 A refreshed access token
 }
 \description{
-Refresh token
+Refresh token (legacy function for backward compatibility)
 }
 \examples{
 \dontrun{

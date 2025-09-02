@@ -1,13 +1,14 @@
 Package: rwithings
 Type: Package
 Title: Tools for Querying the Withings API
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Granville", "Matheson", email = "mathesong@gmail.com", role = c("aut", "cre")),
     person("Bjørn", "Fjukstad", email = "bjornfjukstad@gmail.com", role = "aut"))
 Maintainer: Granville J. Matheson <mathesong@gmail.com>
-Description: Tools for querying the Withings API and csv files
-    extract data into R.
+Description: Tools for querying the Withings Health Mate API and processing CSV files
+    to extract health data into R. Includes updated OAuth2.0 authentication methods
+    compatible with current Withings API endpoints (2024).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -23,6 +24,8 @@ Imports:
     purrr,
     tidyr,
     magrittr,
-    stats
+    stats,
+    utils,
+    digest
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.2

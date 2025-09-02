@@ -1,3 +1,4 @@
+
 #' Get measures data
 #'
 #' @param token Your token obtained using `withings_auth()`
@@ -137,8 +138,13 @@ getsleep <- function(token, startdate=NULL, enddate=NULL, tz="") {
 #'
 getsleepsummary <- function(token, startdate=NULL, enddate=NULL, tz="") {
 
+  # Convert to Date objects first, then format as strings
   startdate <- convert_date(startdate, "Date", tz)
   enddate <- convert_date(enddate, "Date", tz)
+  
+  # Format dates as YYYY-MM-DD strings for the API
+  if(!is.null(startdate)) startdate <- format(startdate, "%Y-%m-%d")
+  if(!is.null(enddate)) enddate <- format(enddate, "%Y-%m-%d")
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")
@@ -190,9 +196,15 @@ getsleepsummary <- function(token, startdate=NULL, enddate=NULL, tz="") {
 #'
 getactivity <- function(token, startdate=NULL, enddate=NULL, offset=NULL, lastupdate=NULL, tz="") {
 
+  # Convert to Date objects first, then format as strings
   startdate <- convert_date(startdate, "Date", tz)
   enddate <- convert_date(enddate, "Date", tz)
   lastupdate <- convert_date(lastupdate, "Date", tz)
+  
+  # Format dates as YYYY-MM-DD strings for the API
+  if(!is.null(startdate)) startdate <- format(startdate, "%Y-%m-%d")
+  if(!is.null(enddate)) enddate <- format(enddate, "%Y-%m-%d")
+  if(!is.null(lastupdate)) lastupdate <- format(lastupdate, "%Y-%m-%d")
 
   if(is.null(startdate) & is.null(enddate) & is.null(lastupdate)) {
     stop("Enter both a startdate and enddate, or a lastupdate")
@@ -300,9 +312,15 @@ getintradayactivity <- function(token, startdate=NULL, enddate=NULL, tz="") {
 getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL,
                         lastupdate=NULL, tz="") {
 
+  # Convert to Date objects first, then format as strings
   startdate <- convert_date(startdate, "Date", tz)
   enddate <- convert_date(enddate, "Date", tz)
   lastupdate <- convert_date(lastupdate, "Date", tz)
+  
+  # Format dates as YYYY-MM-DD strings for the API
+  if(!is.null(startdate)) startdate <- format(startdate, "%Y-%m-%d")
+  if(!is.null(enddate)) enddate <- format(enddate, "%Y-%m-%d")
+  if(!is.null(lastupdate)) lastupdate <- format(lastupdate, "%Y-%m-%d")
 
   if(!is.null(startdate) & !is.null(enddate) & !is.null(lastupdate)) {
     stop("Enter both a startdate and enddate, or a lastupdate, or nothing")
@@ -358,8 +376,13 @@ getworkouts <- function(token, startdate=NULL, enddate=NULL, offset=NULL,
 #'
 getheartlist<- function(token, startdate=NULL, enddate=NULL, offset=NULL, tz="") {
 
+  # Convert to Date objects first, then format as strings
   startdate <- convert_date(startdate, "Date", tz)
   enddate <- convert_date(enddate, "Date", tz)
+  
+  # Format dates as YYYY-MM-DD strings for the API
+  if(!is.null(startdate)) startdate <- format(startdate, "%Y-%m-%d")
+  if(!is.null(enddate)) enddate <- format(enddate, "%Y-%m-%d")
 
   if(is.null(startdate) != is.null(enddate)) {
     stop("Enter both a startdate and enddate")

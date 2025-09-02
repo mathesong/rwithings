@@ -1,8 +1,8 @@
 # rwithings
 
-The goal of rwithings is to enable data extraction from the [Withings Health Mate API](http://developer.withings.com/oauth2/) into R. You will need to follow the instructions on the linked developer's guide to create a Withings account and a Withings developer app.
+The goal of rwithings is to enable data extraction from the [Withings Health Mate API](https://developer.withings.com/) into R. You will need to follow the instructions on the linked developer's guide to create a Withings account and a Withings developer app.
 
-This package is still quite young, so there could very well be some remaining issues.
+**Note: This package has been updated (2024) to fix authentication issues with the current Withings API.**
 
 ## Installation
 
@@ -14,7 +14,7 @@ devtools::install_github("mathesong/rwithings")
 
 ## Prerequisites
 
-Before being able to use this package, and the Withings Health Mate API, you will need to create a Withings account and a Withings developer app. Instructions are provided in the [developer's guide](http://developer.withings.com/oauth2/).
+Before being able to use this package, and the Withings Health Mate API, you will need to create a Withings account and a Withings developer app. Instructions are provided in the [developer's guide](https://developer.withings.com/).
 
 Note: when setting up an app, the Callback URL should be set to http://localhost:1410/. This is not supposed to be allowed, but it does seems to work, and I haven't been able to make it work using another address. If anyone has any input on this, please do make an issue.
 
@@ -23,18 +23,46 @@ Note: when setting up an app, the Callback URL should be set to http://localhost
 
 ### API Functions
 
-The functions of the package basically correspond to the same commands listed in the [developer's guide](http://developer.withings.com/oauth2/), with similar input arguments. Below are some examples.
+The functions of the package basically correspond to the same commands listed in the [developer's guide](https://developer.withings.com/api-reference/), with similar input arguments. Below are some examples.
+
+#### Authentication (Automatic with Fallback)
+
+The package now uses an improved authentication system that tries automatic OAuth first, then falls back to manual authentication with better user experience:
 
 ``` r
 client_id <- 12345
 client_secret <- "hunter2"
 
+# Recommended: Automatic authentication with smart fallback
 token <- withings_auth(client_id, client_secret)
 
-getmeas(token, meastype = 1, category=1, "2018-01-01", "2018-10-18")
-getsleep(token, "2018-10-16", "2018-10-18")
-getsleepsummary(token, "2018-10-16", "2018-10-18")
+# Use the token to get your health data
+sleep_data <- getsleepsummary(token, "2023-01-01", "2023-01-31")
+measurements <- getmeas(token, meastype = 1, category = 1, "2023-01-01", "2023-01-31")
+activity_data <- getactivity(token, "2023-01-01", "2023-01-31")
 ```
+
+#### What happens during authentication:
+
+1. **First**: Attempts automatic browser-based OAuth
+2. **If that fails**: Automatically switches to manual mode with:
+   - Clear instructions for getting the authorization code
+   - Automatic code extraction from URLs (no more manual parsing!)
+   - Proper Withings API nonce-based signing
+
+#### Manual Authentication (If Needed)
+
+If you prefer manual control or need to use a custom redirect URI:
+
+``` r
+# Manual authentication with automatic code extraction
+token <- withings_auth_manual(client_id, client_secret)
+
+# Or with custom redirect URI (must be configured in your Withings app)
+token <- withings_auth_manual(client_id, client_secret, 
+                             redirect_uri = "https://yoursite.com/callback")
+```
+
 In the case of entering in start and end dates, there are conversions in place so that you can enter it as a character vector in YYYY-MM-DD format to make quick queries more easy.
 
 
